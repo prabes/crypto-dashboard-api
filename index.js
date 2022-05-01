@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const db = require("./config/db");
-
+// const router = require("./routes");
 
 var corsOptions = {
 	origin: "http://localhost:8081",
@@ -10,10 +10,17 @@ var corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
+// connect DB
+db.authenticate()
+	.then((result) => {
+		console.log("Connected to DB");
+	})
+	.catch((err) => {
+		console.log("Can't connect to DB::", err);
+	});
+
 // set port
 const PORT = process.env.PORT || 8080;
-
-app.use("/api", (req, res) => res.send('Hey there'));
 
 //listen for requests
 app.listen(PORT, () => {
