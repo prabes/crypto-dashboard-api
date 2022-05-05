@@ -1,8 +1,9 @@
 const Sequelize = require("sequelize");
+require('dotenv').config();
 
 // #TODO pass db configs from .env
-const databaseInstance = new Sequelize('crypto_dashboard', 'postgres','', {
-	host: 'localhost',
+const databaseInstance = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
+	host: process.env.DB_HOST,
 	dialect: "postgres",
 	pool: {
 		max: 5,
@@ -13,5 +14,3 @@ const databaseInstance = new Sequelize('crypto_dashboard', 'postgres','', {
 });
 
 module.exports = databaseInstance;
-
-// export default databaseInstance;
