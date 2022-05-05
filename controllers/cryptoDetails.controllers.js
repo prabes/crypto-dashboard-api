@@ -2,17 +2,17 @@ const sequelize = require('sequelize');
 const CryptoDetail = require("../models/cryptoDetails");
 const Op = sequelize.Op;
 
-const getFindOptions = ({ pageNumber=1,
-  perPage=100,
-  sortColumn='name',
-  sortOrder='ASC',
-  searchQuery="" }) => {
-  if (!searchQuery) {
+const getFindOptions = ({ pageNumber = 1,
+  perPage = 100,
+  sortColumn = 'name',
+  sortOrder = 'ASC',
+  searchQuery = "" }) => {
+  if (searchQuery) {
     return {
       where: {
         [Op.or]: {
-          symbol: { [Op.like]: '%' + searchQuery + '%' },
-          name: { [Op.like]: '%' + searchQuery + '%' },
+          symbol: { [Op.iLike]: '%' + searchQuery + '%' },
+          name: { [Op.iLike]: '%' + searchQuery + '%' },
         }
       },
       offset: pageNumber,
@@ -41,7 +41,6 @@ const index = async (req, res) => {
   } = req.query;
 
   try {
-    console.log("PPP", getFindOptions(req.query))
     const { count, rows: details } = await CryptoDetail.findAndCountAll(getFindOptions(req.query));
 
     return res.status(200).json({
